@@ -9,8 +9,10 @@ on:
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           lfs: true
@@ -24,5 +26,9 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git remote add space https://Usaxena27:$HF_TOKEN@huggingface.co/spaces/Usaxena27/Search_Engine_LLM
+          # Add or update the remote
+          git remote set-url space https://Usaxena27:${HF_TOKEN}@huggingface.co/spaces/Usaxena27/Search_Engine_LLM 2>/dev/null || \
+          git remote add space https://Usaxena27:${HF_TOKEN}@huggingface.co/spaces/Usaxena27/Search_Engine_LLM
+          
+          # Push main branch to Hugging Face Space
           git push --force space main
